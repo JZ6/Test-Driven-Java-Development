@@ -43,9 +43,9 @@ public class BasicRobot implements IBasicRobot {
 	}
 
 	public void moveForward(int millimeters) {
-		double r = Math.toRadians(this.r);
-		this.y += millimeters * Math.cos(r);
-		this.x += millimeters * Math.sin(r);
+		double rad = Math.toRadians(this.r);
+		this.y += millimeters * Math.cos(rad);
+		this.x += millimeters * Math.sin(rad);
 
 	}
 }
