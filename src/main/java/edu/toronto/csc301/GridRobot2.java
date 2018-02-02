@@ -47,7 +47,7 @@ public class GridRobot2 extends BasicRobot implements IGridRobot {
 	}
 
 	public Direction getFacingDirection() {
-		Direction result = null;
+		Direction result = Direction.WEST;
 		if (super.getRotation() == 0) {
 			result = Direction.NORTH;
 		} else if (super.getRotation() == 90) {
