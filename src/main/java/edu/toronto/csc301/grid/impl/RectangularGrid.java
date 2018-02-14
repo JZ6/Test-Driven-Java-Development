@@ -12,7 +12,7 @@ public class RectangularGrid<T> implements IGrid<T> {
 	private int w, h;
 	private GridCell sw;
 	private T t;
-	private ArrayList al;
+	private ArrayList g, rack;
 
 	public RectangularGrid(int w, int h, GridCell sw) {
 		if (sw == null) {
@@ -24,10 +24,12 @@ public class RectangularGrid<T> implements IGrid<T> {
 		this.w = w;
 		this.h = h;
 		this.sw = sw;
-		this.al = new ArrayList<GridCell>();
+		this.g = new ArrayList<GridCell>();
+		this.rack = new ArrayList<GridCell>();
 		for (int i = this.sw.x; i < this.sw.x + this.w; i++) {
 			for (int j = this.sw.y; j < this.sw.y + this.h; j++) {
-				this.al.add(GridCell.at(i,  j));
+				this.g.add(GridCell.at(i,  j));
+
 			}
 		}
 	}
@@ -41,9 +43,9 @@ public class RectangularGrid<T> implements IGrid<T> {
 
 
 	public Iterator<GridCell> getGridCells(){
-		return this.al.iterator();
+		return this.g.iterator();
 	}
 	public boolean hasCell(GridCell cell){
-		return this.al.contains(cell);
+		return this.g.contains(cell);
 	}
 }

@@ -1,11 +1,14 @@
 package edu.toronto.csc301.grid.impl;
 
+import edu.toronto.csc301.grid.GridCell;
 import edu.toronto.csc301.grid.IGrid;
 import edu.toronto.csc301.grid.IGridSerializerDeserializer;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.util.Iterator;
 import java.util.function.Function;
 
 public class RectangularGridSerializerDeserializer implements IGridSerializerDeserializer {
@@ -17,7 +20,37 @@ public class RectangularGridSerializerDeserializer implements IGridSerializerDes
 	 * serialize grid items (of type T).
 	 */
 	public <T> void serialize(IGrid<T> grid, OutputStream output,
-							  Function<T, byte[]> item2byteArray) throws IOException{
+							  Function<T, byte[]> item2byteArray) throws IOException {
+
+		Iterator itr = grid.getGridCells();
+		int minx, miny, maxx, maxy;
+
+		Object element = itr.next();
+		GridCell e = (GridCell) element;
+		minx = maxx = e.x;
+		miny = maxy = e.y;
+
+		while (itr.hasNext()) {
+			element = itr.next();
+			e = (GridCell) element;
+			if (e.x > maxx) {
+				maxx = e.x;
+			}
+			if (e.x < minx) {
+				minx = e.x;
+			}
+			if (e.y > maxy) {
+				maxy = e.y;
+			}
+			if (e.y < miny) {
+				miny = e.y;
+			}
+		}
+		OutputStreamWriter writer = new OutputStreamWriter(output);
+		writer.write(String.format("width: %d\n", maxx - minx + 1));
+		writer.write(String.format("height: %d\n", maxy - miny + 1));
+		writer.write(String.format("south-west: %d:%d\n", minx, miny));
+		writer.close();
 
 	}
 
@@ -28,7 +61,41 @@ public class RectangularGridSerializerDeserializer implements IGridSerializerDes
 	 * de-serialize grid items (of type T).
 	 */
 	public <T> IGrid<T> deserialize(InputStream input,
-									Function<byte[],T> byteArray2item) throws IOException{
-		return null;
+									Function<byte[], T> byteArray2item) throws IOException {
+		char c;
+		String s = "";
+		int a = 0;
+		int w, h, x, y;
+		w = h = x = y = 0;
+		IGrid<T> g;
+
+		int r = input.read();
+		while (r != -1) {
+
+			c = (char) r;
+			s += c;
+
+			if (c == '\n') {
+				if (a != 2) {
+					if (a == 0) {
+						w = Integer.parseInt(s.replaceAll("[\\D]", ""));
+						s = "";
+					} else {
+						h = Integer.parseInt(s.replaceAll("[\\D]", ""));
+						s = "";
+					}
+					a++;
+				}else {
+					String[] gs = s.split(":");
+					x = Integer.parseInt(gs[1].trim());
+					y = Integer.parseInt(gs[2].trim());
+				}
+			}
+
+			r = input.read();
+		}
+
+		g = new RectangularGrid<T>(w, h, GridCell.at(x, y));
+		return g;
 	}
 }
