@@ -76,20 +76,17 @@ public class RectangularGridSerializerDeserializer implements IGridSerializerDes
 			s += c;
 
 			if (c == '\n') {
-				if (a != 2) {
-					if (a == 0) {
-						w = Integer.parseInt(s.replaceAll("[\\D]", ""));
-						s = "";
-					} else {
-						h = Integer.parseInt(s.replaceAll("[\\D]", ""));
-						s = "";
-					}
-					a++;
-				}else {
+				if (a == 0) {
+					w = Integer.parseInt(s.replaceAll("[\\D]", ""));
+				} else if (a == 1) {
+					h = Integer.parseInt(s.replaceAll("[\\D]", ""));
+				} else if (a == 2) {
 					String[] gs = s.split(":");
 					x = Integer.parseInt(gs[1].trim());
 					y = Integer.parseInt(gs[2].trim());
 				}
+				s = "";
+				a++;
 			}
 
 			r = input.read();
