@@ -13,7 +13,7 @@ public class RectangularGrid<T> implements IGrid<T> {
 	private int w, h;
 	private GridCell sw;
 	private ArrayList g;
-	private HashMap<Integer, T> rack = new HashMap<Integer, T>();
+	private HashMap<Integer, T> rack;
 
 	public RectangularGrid(int w, int h, GridCell sw) {
 		if (sw == null) {
@@ -32,6 +32,7 @@ public class RectangularGrid<T> implements IGrid<T> {
 
 			}
 		}
+		this.rack = new HashMap<Integer, T>();
 	}
 
 	public T getItem(GridCell cell) {
@@ -39,7 +40,7 @@ public class RectangularGrid<T> implements IGrid<T> {
 			throw new IllegalArgumentException();
 		}
 
-		return rack.get(cell.hashCode());
+		return this.rack.get(cell.hashCode());
 	}
 
 	public Iterator<GridCell> getGridCells() {
@@ -50,8 +51,8 @@ public class RectangularGrid<T> implements IGrid<T> {
 		return this.g.contains(cell);
 	}
 
-	public boolean addrack(T r,GridCell cell){
-		this.rack.put(cell.hashCode(),r);
+	public boolean addrack(T r, GridCell cell) {
+		this.rack.put(cell.hashCode(), r);
 		return true;
 	}
 }

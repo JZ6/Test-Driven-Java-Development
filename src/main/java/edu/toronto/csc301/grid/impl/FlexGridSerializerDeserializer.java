@@ -1,7 +1,9 @@
 package edu.toronto.csc301.grid.impl;
 
+import edu.toronto.csc301.grid.GridCell;
 import edu.toronto.csc301.grid.IGrid;
 import edu.toronto.csc301.grid.IGridSerializerDeserializer;
+import edu.toronto.csc301.warehouse.Rack;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,7 +30,55 @@ public class FlexGridSerializerDeserializer implements IGridSerializerDeserializ
 	 * de-serialize grid items (of type T).
 	 */
 	public <T> IGrid<T> deserialize(InputStream input,
-									Function<byte[],T> byteArray2item) throws IOException{
-		return null;
+									Function<byte[], T> byteArray2item) throws IOException {
+		char c;
+		String s = "";
+
+		FlexGrid<T> g = new FlexGrid<>();
+
+
+		int r = input.read();
+		while (r != -1) {
+
+			c = (char) r;
+			s += c;
+
+			if (c == '\n') {
+
+				String[] fg = s.split(" ");
+				String gx = fg[0].split(":")[0].trim();
+				String gy = fg[0].split(":")[1].trim();
+
+				GridCell gc = GridCell.at(Integer.parseInt(gx), Integer.parseInt(gy));
+				g.addcell(gc);
+
+				if (fg.length == 2) {
+					int rackcapcity = Integer.parseInt(fg[1].split(":")[1].trim());
+					g.addrack((T) new Rack(rackcapcity), gc);
+				}
+
+				s = "";
+			}
+			r = input.read();
+		}
+		if (s != "") {
+
+			String[] fg = s.split(" ");
+			String gx = fg[0].split(":")[0].trim();
+			String gy = fg[0].split(":")[1].trim();
+
+			System.out.printf(" gx:%s ", gx);
+			System.out.printf("gy:%s \n", gy);
+
+			GridCell gc = GridCell.at(Integer.parseInt(gx), Integer.parseInt(gy));
+			g.addcell(gc);
+
+			if (fg.length == 2) {
+				int rackcapcity = Integer.parseInt(fg[1].split(":")[1].trim());
+				g.addrack((T) new Rack(rackcapcity), gc);
+			}
+		}
+
+		return (IGrid<T>) g;
 	}
 }
