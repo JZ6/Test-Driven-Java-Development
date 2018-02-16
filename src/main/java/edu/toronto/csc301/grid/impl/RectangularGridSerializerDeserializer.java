@@ -3,11 +3,13 @@ package edu.toronto.csc301.grid.impl;
 import edu.toronto.csc301.grid.GridCell;
 import edu.toronto.csc301.grid.IGrid;
 import edu.toronto.csc301.grid.IGridSerializerDeserializer;
+import edu.toronto.csc301.warehouse.Rack;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.function.Function;
 
@@ -30,6 +32,7 @@ public class RectangularGridSerializerDeserializer implements IGridSerializerDes
 		minx = maxx = e.x;
 		miny = maxy = e.y;
 
+
 		while (itr.hasNext()) {
 			element = itr.next();
 			e = (GridCell) element;
@@ -50,6 +53,20 @@ public class RectangularGridSerializerDeserializer implements IGridSerializerDes
 		writer.write(String.format("width: %d\n", maxx - minx + 1));
 		writer.write(String.format("height: %d\n", maxy - miny + 1));
 		writer.write(String.format("south-west: %d:%d\n", minx, miny));
+
+		Rack r = null;
+		ArrayList racks = new ArrayList<GridCell>();
+
+		itr = grid.getGridCells();
+		while (itr.hasNext()) {
+			element = itr.next();
+			e = (GridCell) element;
+			r = (Rack) grid.getItem(e);
+			if (r != null) {
+				writer.write(String.format("%d:%d R:%d\n", e.x, e.y, r.getCapacity()));
+			}
+		}
+
 		writer.close();
 
 	}
@@ -67,7 +84,8 @@ public class RectangularGridSerializerDeserializer implements IGridSerializerDes
 		int a = 0;
 		int w, h, x, y;
 		w = h = x = y = 0;
-		IGrid<T> g;
+		RectangularGrid<T> g = null;
+
 
 		int r = input.read();
 		while (r != -1) {
@@ -76,14 +94,24 @@ public class RectangularGridSerializerDeserializer implements IGridSerializerDes
 			s += c;
 
 			if (c == '\n') {
-				if (a == 0) {
+				if (a == 0) {    //width
 					w = Integer.parseInt(s.replaceAll("[\\D]", ""));
-				} else if (a == 1) {
+				} else if (a == 1) {    //height
 					h = Integer.parseInt(s.replaceAll("[\\D]", ""));
-				} else if (a == 2) {
+				} else if (a == 2) {    //south west block
 					String[] gs = s.split(":");
 					x = Integer.parseInt(gs[1].trim());
 					y = Integer.parseInt(gs[2].trim());
+					g = new RectangularGrid<T>(w, h, GridCell.at(x, y));
+				} else {    //racks
+					String[] rs = s.split(" ");
+					String gx = rs[0].split(":")[0].trim();
+					String gy = rs[0].split(":")[1].trim();
+					int rackcapcity = Integer.parseInt(rs[1].split(":")[1].trim());
+					GridCell gc = GridCell.at(Integer.parseInt(gx), Integer.parseInt(gy));
+
+					g.addrack((T) new Rack(rackcapcity), gc);
+
 				}
 				s = "";
 				a++;
@@ -92,7 +120,6 @@ public class RectangularGridSerializerDeserializer implements IGridSerializerDes
 			r = input.read();
 		}
 
-		g = new RectangularGrid<T>(w, h, GridCell.at(x, y));
-		return g;
+		return (IGrid<T>) g;
 	}
 }
