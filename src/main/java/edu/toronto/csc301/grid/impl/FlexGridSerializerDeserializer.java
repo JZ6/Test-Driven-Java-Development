@@ -8,6 +8,9 @@ import edu.toronto.csc301.warehouse.Rack;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.function.Function;
 
 public class FlexGridSerializerDeserializer implements IGridSerializerDeserializer {
@@ -21,6 +24,24 @@ public class FlexGridSerializerDeserializer implements IGridSerializerDeserializ
 	public <T> void serialize(IGrid<T> grid, OutputStream output,
 							  Function<T, byte[]> item2byteArray) throws IOException {
 
+		Iterator itr = grid.getGridCells();
+		Object element;
+		GridCell e;
+		OutputStreamWriter writer = new OutputStreamWriter(output);
+		Rack r;
+
+		while (itr.hasNext()) {
+			element = itr.next();
+			e = (GridCell) element;
+			writer.write(String.format("%d:%d", e.x, e.y));
+			r = (Rack) grid.getItem(e);
+			if (r != null) {
+				writer.write(String.format(" R:%d", r.getCapacity()));
+			}
+			writer.write(String.format("\n"));
+
+		}
+		writer.close();
 	}
 
 
@@ -66,9 +87,6 @@ public class FlexGridSerializerDeserializer implements IGridSerializerDeserializ
 			String[] fg = s.split(" ");
 			String gx = fg[0].split(":")[0].trim();
 			String gy = fg[0].split(":")[1].trim();
-
-			System.out.printf(" gx:%s ", gx);
-			System.out.printf("gy:%s \n", gy);
 
 			GridCell gc = GridCell.at(Integer.parseInt(gx), Integer.parseInt(gy));
 			g.addcell(gc);

@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.function.Function;
 
@@ -49,13 +48,21 @@ public class RectangularGridSerializerDeserializer implements IGridSerializerDes
 				miny = e.y;
 			}
 		}
+		//Check is rectangle.
+		for (int x = minx; x < maxx; x++) {
+			for (int y = miny; y < maxy; y++) {
+				if(!grid.hasCell(GridCell.at(x,y))){
+					throw new IllegalArgumentException();
+				}
+			}
+		}
+
 		OutputStreamWriter writer = new OutputStreamWriter(output);
 		writer.write(String.format("width: %d\n", maxx - minx + 1));
 		writer.write(String.format("height: %d\n", maxy - miny + 1));
 		writer.write(String.format("south-west: %d:%d\n", minx, miny));
 
-		Rack r = null;
-		ArrayList racks = new ArrayList<GridCell>();
+		Rack r;
 
 		itr = grid.getGridCells();
 		while (itr.hasNext()) {
