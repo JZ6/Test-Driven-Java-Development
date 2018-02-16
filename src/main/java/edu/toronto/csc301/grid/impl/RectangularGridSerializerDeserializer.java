@@ -51,7 +51,7 @@ public class RectangularGridSerializerDeserializer implements IGridSerializerDes
 		//Check is rectangle.
 		for (int x = minx; x < maxx; x++) {
 			for (int y = miny; y < maxy; y++) {
-				if(!grid.hasCell(GridCell.at(x,y))){
+				if (!grid.hasCell(GridCell.at(x, y))) {
 					throw new IllegalArgumentException();
 				}
 			}
@@ -90,7 +90,7 @@ public class RectangularGridSerializerDeserializer implements IGridSerializerDes
 		String s = "";
 		int a = 0;
 		int w, h, x, y;
-		w = h = x = y = 0;
+		w = h = 0;
 		RectangularGrid<T> g = null;
 
 
@@ -101,24 +101,30 @@ public class RectangularGridSerializerDeserializer implements IGridSerializerDes
 			s += c;
 
 			if (c == '\n') {
-				if (a == 0) {    //width
-					w = Integer.parseInt(s.replaceAll("[\\D]", ""));
-				} else if (a == 1) {    //height
-					h = Integer.parseInt(s.replaceAll("[\\D]", ""));
-				} else if (a == 2) {    //south west block
-					String[] gs = s.split(":");
-					x = Integer.parseInt(gs[1].trim());
-					y = Integer.parseInt(gs[2].trim());
-					g = new RectangularGrid<T>(w, h, GridCell.at(x, y));
-				} else {    //racks
-					String[] rs = s.split(" ");
-					String gx = rs[0].split(":")[0].trim();
-					String gy = rs[0].split(":")[1].trim();
-					int rackcapcity = Integer.parseInt(rs[1].split(":")[1].trim());
-					GridCell gc = GridCell.at(Integer.parseInt(gx), Integer.parseInt(gy));
+				switch (a) {
+					case 0:     //width
+						w = Integer.parseInt(s.replaceAll("[\\D]", ""));
+						break;
+					case 1:     //height
+						h = Integer.parseInt(s.replaceAll("[\\D]", ""));
+						break;
+					case 2:     //south west block
+						String[] gs = s.split(":");
+						x = Integer.parseInt(gs[1].trim());
+						y = Integer.parseInt(gs[2].trim());
+						g = new RectangularGrid<T>(w, h, GridCell.at(x, y));
+						break;
+					default:     //racks
+						String[] rs = s.split(" ");
+						String gx = rs[0].split(":")[0].trim();
+						String gy = rs[0].split(":")[1].trim();
+						int rackcapcity = Integer.parseInt(rs[1].split(":")[1].trim());
+						GridCell gc = GridCell.at(Integer.parseInt(gx), Integer.parseInt(gy));
 
-					g.addrack((T) new Rack(rackcapcity), gc);
+						assert g != null;
+						g.addrack((T) new Rack(rackcapcity), gc);
 
+						break;
 				}
 				s = "";
 				a++;
@@ -127,6 +133,6 @@ public class RectangularGridSerializerDeserializer implements IGridSerializerDes
 			r = input.read();
 		}
 
-		return (IGrid<T>) g;
+		return g;
 	}
 }

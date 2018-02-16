@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.function.Function;
 
@@ -38,7 +37,7 @@ public class FlexGridSerializerDeserializer implements IGridSerializerDeserializ
 			if (r != null) {
 				writer.write(String.format(" R:%d", r.getCapacity()));
 			}
-			writer.write(String.format("\n"));
+			writer.write("\n");
 
 		}
 		writer.close();
@@ -82,7 +81,7 @@ public class FlexGridSerializerDeserializer implements IGridSerializerDeserializ
 			}
 			r = input.read();
 		}
-		if (s != "") {
+		if (!s.equals("")) {
 
 			String[] fg = s.split(" ");
 			String gx = fg[0].split(":")[0].trim();
@@ -97,6 +96,6 @@ public class FlexGridSerializerDeserializer implements IGridSerializerDeserializ
 			}
 		}
 
-		return (IGrid<T>) g;
+		return g;
 	}
 }

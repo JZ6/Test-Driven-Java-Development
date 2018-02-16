@@ -51,8 +51,7 @@ public class RectangularGrid<T> implements IGrid<T> {
 		return this.g.contains(cell);
 	}
 
-	public boolean addrack(T r, GridCell cell) {
+	public void addrack(T r, GridCell cell) {
 		this.rack.put(cell.hashCode(), r);
-		return true;
 	}
 }
