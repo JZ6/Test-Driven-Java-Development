@@ -40,6 +40,7 @@ public class Warehouse implements IWarehouse, StepListener {
 		if (!this.g.hasCell(initialLocation)) {
 			throw new IllegalArgumentException();
 		}
+
 		this.r.forEach(robot -> {
 			if (robot.getLocation().equals(initialLocation)) {
 				throw new IllegalArgumentException();
@@ -83,7 +84,6 @@ public class Warehouse implements IWarehouse, StepListener {
 		for (i = 0; i < this.observing.size(); i++) {
 			this.observing.get(i).accept(this);
 		}
-
 	}
 
 	@Override
@@ -93,6 +93,5 @@ public class Warehouse implements IWarehouse, StepListener {
 		for (i = 0; i < this.observing.size(); i++) {
 			this.observing.get(i).accept(this);
 		}
-
 	}
 }
