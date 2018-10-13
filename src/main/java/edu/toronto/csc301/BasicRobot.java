@@ -25,13 +25,17 @@ public class BasicRobot implements IBasicRobot {
 		return this.r;
 	}
 
-	public void rotateRight(int degrees) {
-		if (degrees < 0) {
-			this.r = this.r + (360 + degrees);
-		} else {
-			this.r = (this.r + degrees) % 360;
-		}
+	public void setRotation(int rotation) {
+		this.r = rotation;
+	}
 
+	public void rotateRight(int degrees) {
+		degrees %= 360;
+		this.r += degrees;
+		if (this.r < 0) {
+			this.r = 360 + this.r;
+		}
+		this.r %= 360;
 	}
 
 	public void rotateLeft(int degrees) {
@@ -40,12 +44,12 @@ public class BasicRobot implements IBasicRobot {
 		if (this.r < 0) {
 			this.r = 360 + this.r;
 		}
+		this.r %= 360;
 	}
 
 	public void moveForward(int millimeters) {
-		double r = Math.toRadians(this.r);
-		this.y += millimeters * Math.cos(r);
-		this.x += millimeters * Math.sin(r);
-
+		double rad = Math.toRadians(this.r);
+		this.y += millimeters * Math.cos(rad);
+		this.x += millimeters * Math.sin(rad);
 	}
 }

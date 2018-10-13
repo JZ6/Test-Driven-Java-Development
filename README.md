@@ -1,8 +1,8 @@
 ## Learning goals
 
- * Get you familiar with the tools we'll be using (Git, GitHub, Travis CI, etc.)
- * Get you used to our individual assignment workflow
- * Refresh your basic Java skills
+ * Interface vs. implementation
+ * Abstracting low-level details with higher-level API
+ * Composition vs. inheritance
 
 ## Getting Started
 
@@ -37,6 +37,18 @@ These tests specify which classes you need to create, which interfaces they shou
 _Note:_ This assignment is slightly different than a real _test driven development_ environment.
 In most realistic scenarios, you will not start with a full set of test cases. Instead, you will write a test (or a few tests), then write the code to pass the test(s) and repeat the process.
 
+ 
+In this assignment, you will abstract the details of a [basic robot API](/src/main/java/edu/toronto/csc301/IBasicRobot.java) 
+with a [higher-level API ](/src/main/java/edu/toronto/csc301/IGridRobot.java) for robots that move in a grid.
+
+You are asked to create two different implementation of the `IGridRobot` interface:
+
+ 1. By composition, where an IGridRobot uses an IBasicRobot.
+ 2. By inheritance, where an IGridRobot is an IBasicRobot.
+  
+As with the previous assignment, you should start by running 
+[`SetupTest`](src/test/java/edu/toronto/csc301/SetupTest.java) 
+(In Eclipse, _right click -> Run As -> JUnit Test_). 
 
 
 ## Deliverables
@@ -50,6 +62,9 @@ Your code will be **marked automatically**, according to the following scheme:
  * 100% : Passing all tests (i.e. Get a green light from Travis CI)
  * 50%  : Failing at most 3 tests
  * 0    : Failing more than 3 tests (or not submitting a solution)
+ * 75%  : Failing at most 3 tests
+ * 50%  : Failing between 4 to 10 tests
+ * 0    : Failing more than 10 tests (or not submitting a solution)
 
 
 ## Important Notes

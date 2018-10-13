@@ -2,9 +2,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>edu.toronto.csc301</groupId>
-	<artifactId>a1</artifactId>
+	<artifactId>a2</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>CSC301, Fall 2018, Individual Assignment</name>
+	<name>CSC301, Fall 2017, Individual Assignment</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -57,6 +57,7 @@
 			<groupId>com.github.csc301-fall-2016</groupId>
 			<artifactId>csc301-java-utils</artifactId>
 			<version>master-SNAPSHOT</version>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>
