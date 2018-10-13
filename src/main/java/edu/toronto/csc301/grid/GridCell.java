@@ -6,12 +6,16 @@ package edu.toronto.csc301.grid;
  * Convenience class - Immutable pair of x and y coordinates.
  * 
  * @author Joey Freund
+/**
+ * A little helper class.
+ * A pair of X/Y coordinates that represents a location on a grid.
  */
 public class GridCell {	
 	
 	
 	/**
 	 * Static factory method, for convenience.
+	 * Static factory method.
 	 * @return A grid-cell instance with the given XY-coordinates.
 	 */
 	public static GridCell at(int x, int y){
